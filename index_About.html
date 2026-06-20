@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux - About Us</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/iujdB6t.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-base: #1c053a;
+            --bg-dark: #0f0221;
+            --text-light: #ffffff;
+            --text-muted: #c084fc;
+            --accent-primary: #a855f7;
+            --accent-secondary: #e879f9;
+            --accent-hover: #f472b6;
+            --glow: rgba(232, 121, 249, 0.4);
+            --card-bg: rgba(31, 7, 54, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-light);
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at top left, #3b137a 0%, var(--bg-dark) 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23581c91' stroke-width='3' stroke-opacity='0.15'%3E%3Cpath d='M15,15 C15,15 25,10 40,10 C55,10 65,15 65,15 C65,15 70,35 70,45 C70,60 55,70 40,70 C25,70 10,60 10,45 C10,35 15,15 15,15 Z' transform='rotate(-15 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("https://i.imgur.com/VxFmpxF.png") center/cover no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-brand {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--text-muted);
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-brand:hover {
+            color: var(--accent-secondary);
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-left: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-hover);
+            text-shadow: 0 0 10px var(--accent-hover);
+        }
+
+        .about-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 5% 5rem 5%;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 45px;
+            font-weight: 900;
+            color: var(--accent-secondary);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--glow);
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 24px;
+            padding: 30px 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .about-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .about-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 25px;
+            color: var(--accent-secondary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .about-card h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .about-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e2d5f0;
+            font-weight: 600;
+        }
+
+        .highlight-banner {
+            margin-top: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.4), rgba(59, 19, 122, 0.4));
+            border: 2px dashed var(--accent-primary);
+            border-radius: 20px;
+            padding: 25px 20px;
+        }
+
+        .highlight-banner h3 {
+            font-size: 16px;
+            color: var(--accent-secondary);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-banner p {
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 800;
+        }
+
+        @media (max-width: 900px) {
+            .navbar { flex-direction: column; gap: 15px; }
+            .nav-links a { margin: 0 10px; font-size: 10px; }
+            .page-title { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">REDUX</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index_FAQ.html">FAQs</a>
+            <a href="index_UI_Leaks.html">UI Leaks</a>
+            <a href="index_About.html" class="active">About</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <div class="page-header">
+            <h1 class="page-title">Who We Are</h1>
+            <p class="page-subtitle">Rebuilding the universe</p>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <i class="fa-solid fa-rocket card-icon"></i>
+                <h2>Our Mission</h2>
+                <p>We are REDUX, a fanmade project dedicated to bringing back Recroom. The shutdown left a void in the community, and we decided to change that. Redux is built on the promise to remain free to download and play forever.</p>
+            </div>
+            
+            <div class="about-card">
+                <i class="fa-solid fa-users card-icon"></i>
+                <h2>The Team</h2>
+                <p>We are a small but dedicated team of developers, artists, and designers. We share a common passion for creating a fun, engaging, and highly accessible universe where players can reunite and build new memories.</p>
+            </div>
+        </div>
+
+        <div class="highlight-banner">
+            <h3>As always, give it your REDUX BEST!</h3>
+            <p>- The Redux Team</p>
+        </div>
+    </main>
+
+</body>
+</html>
