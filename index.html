@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux - The Revival</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/iujdB6t.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-base: #1c053a;
+            --bg-dark: #0f0221;
+            --text-light: #ffffff;
+            --text-muted: #c084fc;
+            --accent-primary: #a855f7;
+            --accent-secondary: #e879f9;
+            --accent-hover: #f472b6;
+            --glow: rgba(232, 121, 249, 0.4);
+            --card-bg: rgba(31, 7, 54, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-light);
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at top left, #3b137a 0%, var(--bg-dark) 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23581c91' stroke-width='3' stroke-opacity='0.15'%3E%3Cpath d='M15,15 C15,15 25,10 40,10 C55,10 65,15 65,15 C65,15 70,35 70,45 C70,60 55,70 40,70 C25,70 10,60 10,45 C10,35 15,15 15,15 Z' transform='rotate(-15 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("https://i.imgur.com/VxFmpxF.png") center/cover no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .navigator-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: 900;
+            color: var(--accent-secondary);
+            text-decoration: none;
+            text-shadow: 0 0 15px var(--glow);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .navigator a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 19px;
+            font-weight: 800;
+            margin-left: 25px;
+            transition: all 0.3s;
+        }
+
+        .navigator a:hover, .navigator a.active {
+            color: var(--accent-hover);
+            text-shadow: 0 0 10px var(--accent-hover);
+        }
+
+        .section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: auto;
+            padding: 40px 5%;
+            gap: 40px;
+            flex-grow: 1;
+        }
+
+        .content {
+            flex: 1 1 500px;
+        }
+
+        .title {
+            font-size: clamp(80px, 80px, 80px);
+            font-weight: 900;
+            color: var(--text-light);
+            line-height: 1;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .title-highlight {
+            color: var(--accent-secondary);
+            text-shadow: 0 0 25px var(--glow);
+        }
+
+        .subtitle {
+            font-size: 19px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 25px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .platform-strip {
+            display: flex;
+            gap: 50px;
+            font-size: 38px;
+            color: var(--accent-primary);
+            margin-bottom: 30px;
+        }
+
+        .platform-strip i {
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .platform-strip i:hover {
+            color: var(--accent-secondary);
+            transform: translateY(-5px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 25px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 20px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4c1d95, #3b137a);
+            color: #fff;
+            border: 2px solid var(--accent-primary);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-secondary);
+            box-shadow: 0 12px 30px var(--glow);
+        }
+
+        .secondary {
+            background: transparent;
+            color: var(--accent-secondary);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .secondary:hover {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        .hero-visuals {
+            flex: 1 1 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .feature {
+            background: var(--card-bg);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateX(-10px);
+            border-color: var(--accent-primary);
+        }
+
+        .feature h3 {
+            color: var(--accent-secondary);
+            font-size: 22px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .feature p {
+            color: var(--text-light);
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--accent-primary);
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-hover);
+        }
+
+        @media (max-width: 900px) {
+            .navigator-bar { flex-direction: column; gap: 1.5rem; }
+            .navigator a { margin: 0 16px; }
+            .section { text-align: center; }
+            .subtitle { margin: 0 auto 40px auto; }
+            .platform-strip, .btn-group { justify-content: center; }
+            .feature:hover { transform: translateY(-5px); }
+        }
+
+        .status {
+            font-size: 15px;
+            color: var(--accent-primary);
+            background-color: #5504d8ad;
+            color: #ff0000;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-left: 8px;
+            font-family: 'Noto Color Emoji', sans-serif;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <nav class="navigator-bar">
+        <a href="index.html" class="logo">REDUX</a>
+        <div class="navigator">
+            <a href="index_status.html" class="active">Status:<span class="status">🔴 Offline</span></a>
+            <a href="index_FAQ.html">FAQs</a>
+            <a href="index_UI_Leaks.html">UI Leaks</a>
+            <a href="index_About.html">About</a>
+        </div>
+    </nav>
+
+    <main class="section">
+        <div class="content">
+            <h1 class="title">Play <br><span class="title-highlight">Redux</span></h1>
+            <p class="subtitle">A fanmade project to bring back the universe you love. Free to download, free to play, forever.</p>
+            
+            <div class="platform-strip">
+                <i class="fa-solid fa-desktop"></i>
+                <i class="fa-solid fa-vr-cardboard"></i>
+                <i class="fa-solid fa-infinity"></i>
+                <i class="fa-brands fa-android"></i>
+            </div>
+
+            <div class="btn-group">
+                <a href="https://discord.gg/MgQGt4KbED" class="btn btn-primary" target="_blank">
+                    <i class="fa-brands fa-discord"></i> Join Discord
+                </a>
+                <a href="index_UI_Leaks.html" class="btn secondary">
+                    <i class="fa-solid fa-eye"></i> View Leaks
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visuals">
+            <div class="feature">
+                <h3><i class="fa-solid fa-server"></i> Community Driven</h3>
+                <p>Built by fans, for fans. Experience the classic feel with modern improvements and a dedicated team.</p>
+            </div>
+            <div class="feature">
+                <h3><i class="fa-solid fa-gamepad"></i> Cross-Platform</h3>
+                <p>Play anywhere. Support for PC, VR, Quest, and Android is actively in development.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        made by <a href="https://www.youtube.com/@AfkChickenMC" target="_blank">AfkChicken</a> for Redux
+    </footer>
+
+</body>
+</html>
